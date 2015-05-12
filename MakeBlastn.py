@@ -30,7 +30,7 @@ class MakeBlastn(object):
 
     #~~~~~~~FONDAMENTAL METHODS~~~~~~~#
 
-    def __init__ (self, blast_exec="blastn", blastn_opt="", task="megablast", evalue=10,
+    def __init__ (self, blast_exec="blastn", blastn_opt="", task="dc-megablast", evalue=1,
         best_per_query_seq = False):
         """
         Initialize the object and index the reference genome if necessary
@@ -42,10 +42,12 @@ class MakeBlastn(object):
         """
         # Creating object variables
         self.blast_exec = blast_exec
-        self.blastn_opt = "{} -num_threads {} -task {} -evalue {} -outfmt 6 -dust no".format(
-            blastn_opt, cpu_count(), task, evalue)
         self.best_per_query_seq = best_per_query_seq
         self.evalue = evalue
+
+        # Define options from function args and additional options
+        self.blastn_opt = "{} -num_threads {} -task {} -evalue {} -outfmt \"6 std qseq\" -dust no".format(
+            blastn_opt, cpu_count(), task, evalue)
 
     def __str__(self):
         msg = "BLAST WRAPPER\n"
@@ -90,8 +92,9 @@ class MakeBlastn(object):
         if not self.best_per_query_seq:
             hit_list = []
             for line in stdout.splitlines():
-                h = line.split()
-                hit_list.append(BlastHit(h[0], h[1] , h[2], h[3], h[4], h[5], h[6], h[7], h[8], h[9], h[10], h[11]))
+                # split the line in a list and send the expanded list to blasthit
+                hit_split = line.split()
+                hit_list.append(BlastHit(*hit_split))
 
             print ("\t{} hits found".format(len(hit_list)))
             return hit_list
@@ -101,11 +104,13 @@ class MakeBlastn(object):
         hit_dict = {}
         # Parse each result lines and create a list of BlastHit objects per query
         for i, line in enumerate(stdout.splitlines()):
-            h = line.split()
-            if h[0] in hit_dict:
-                hit_dict[h[0]].append(BlastHit(h[0], h[1] , h[2], h[3], h[4], h[5], h[6], h[7], h[8], h[9], h[10], h[11]))
+            # split the line in a list and send the expanded list to blasthit
+            hit_split = line.split()
+            query_id = hit_split[0]
+            if query_id in hit_dict:
+                hit_dict[query_id].append(BlastHit(*hit_split))
             else:
-                hit_dict[h[0]] = [BlastHit(h[0], h[1] , h[2], h[3], h[4], h[5], h[6], h[7], h[8], h[9], h[10], h[11])]
+                hit_dict[query_id] = [BlastHit(*hit_split)]
 
         print ("\t{} hits found from {} query".format(i, len(hit_dict)))
 

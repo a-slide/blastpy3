@@ -27,8 +27,8 @@ if __name__ == '__main__':
         hit_list = []
         for i in range (100):
             hit_list .append(BlastHit (
-                q_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(20)),
-                s_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(20)),
+                q_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10)),
+                s_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10)),
                 identity = random.uniform(0, 1),
                 length = random.randint(1, 100),
                 mis = random.randint(0, 100),
@@ -38,7 +38,8 @@ if __name__ == '__main__':
                 s_start = random.randint(0, 100),
                 s_end = random.randint(0, 100),
                 evalue = random.uniform(0, 1),
-                bscore = random.uniform(0, 1)))
+                bscore = random.uniform(0, 1),
+                qseq = ''.join(random.choice(["A","T","C","G"]) for _ in range(20))))
         assert len(hit_list) == 100, "Incorect number of hit generated"
         msg += "PASS\t BlastHit test\n"
     except Exception as E:
