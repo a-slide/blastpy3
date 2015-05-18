@@ -66,6 +66,7 @@ class BlastHit(object):
         @param  qseq Sequence of the query aligned on the reference
         """
 
+        # Store parameters in self variables
         self.id = self.next_id()
         self.q_id = q_id
         self.s_id = s_id
@@ -73,6 +74,10 @@ class BlastHit(object):
         self.length = int(length)
         self.mis = int(mis)
         self.gap = int(gap)
+        self.q_start =  int(q_start)
+        self.q_end =  int(q_end)
+        self.s_start =  int(s_start)
+        self.s_end =  int(s_end)
         self.evalue = float(evalue)
         self.bscore = float(bscore)
         self.qseq = qseq
@@ -80,17 +85,6 @@ class BlastHit(object):
         # Orientation of the query and subject along the hit
         self.q_orient = int(q_start) < int(q_end)
         self.s_orient = int(s_start) < int(s_end)
-
-        # Autoadapt start and end so that start is always smaller than end
-        if self.q_orient:
-            self.q_start, self.q_end = q_start, q_end
-        else:
-            self.q_start, self.q_end = q_end, q_start
-
-        if self.s_orient:
-            self.s_start, self.s_end = s_start, s_end
-        else:
-            self.s_start, self.s_end = s_end, s_start
 
     def __repr__(self):
         msg = "HIT {}".format(self.id)
