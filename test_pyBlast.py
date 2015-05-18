@@ -24,8 +24,8 @@ def test_MakeBlastDB():
     from MakeBlastDB import MakeBlastDB
     db_maker = MakeBlastDB()
     assert(db_maker (
-            ref_path= os.getcwd()+"/test/Reference.fa" ,
-            db_path= os.getcwd()+"./test/Reference"))
+            ref_path= "./test/Reference.fa" ,
+            db_path= "../test/Reference"))
 
 def test_BlastHit():
     from BlastHit import BlastHit
@@ -54,5 +54,5 @@ def test_MakeBlastn():
             best_per_query_seq = random.choice([True, False]))
 
         assert(blast_maker(
-                query_path=os.getcwd()+"/test/query_sample.fa",
-                db_path=os.getcwd()+"/test/Reference" ))
+                query_path="./test/query_sample.fa",
+                db_path="./test/Reference" ))
