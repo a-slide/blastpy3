@@ -25,7 +25,7 @@ def test_MakeBlastDB():
     db_maker = MakeBlastDB()
     assert(db_maker (
             ref_path= "./test/Reference.fa" ,
-            db_path= "../test/Reference"))
+            db_path= "./test/Reference"))
 
 def test_BlastHit():
     from BlastHit import BlastHit
