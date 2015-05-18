@@ -71,12 +71,12 @@ class MakeBlastDB(object):
             if proc.returncode == 1:
                 msg = "An error occured during execution of following command :\n"
                 msg += "COMMAND : {}\n".format(cmd)
-                msg += "STDERR : {}\n".format(stderr)
+                msg += "STDERR : {}\n".format(stderr.strip())
                 raise Exception (msg)
 
             # Verify the output
             if not stdout:
-                raise Exception ("Error, no data received from standard output\n"+stderr)
+                raise Exception ("Error, no data received from standard output\n{}\n".format(stderr.strip()))
 
             return path.abspath(db_path)
 
@@ -89,4 +89,4 @@ class MakeBlastDB(object):
                 if path.isfile (f):
                     remove (f)
 
-            raise Exception (E.message+"Impossible to generate a valid database from the reference sequence")
+            raise Exception (str(E)+"Impossible to generate a valid database from the reference sequence")
