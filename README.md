@@ -1,6 +1,10 @@
 # pyBlast
 
-Python 2.7/3.3 wrapper for ncbi blast+
+Python 2.7/3.3 wrapper for BLAST+
+
+## Dependencies
+ncbi blast+
+python package pytest for tests
 
 ## Test
 
