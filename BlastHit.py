@@ -30,6 +30,8 @@ class BlastHit(object):
     * s_end : Hit end position of the subject
     * evalue : E value of the alignement
     * bscore : Bit score of the alignement
+    * q_seq : Sequence of the query aligned on the reference
+
     A class list is used to track all instances generated.
     """
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -47,7 +49,7 @@ class BlastHit(object):
 
     #~~~~~~~FONDAMENTAL METHODS~~~~~~~#
 
-    def __init__(self, q_id, s_id, identity, length, mis, gap, q_start, q_end, s_start, s_end, evalue, bscore, qseq):
+    def __init__(self, q_id, s_id, identity, length, mis, gap, q_start, q_end, s_start, s_end, evalue, bscore, q_seq):
         """
         Create a BlastHit object which is automatically added to the class tracking instance list
         The object with the following parameters are required for object initialisation
@@ -63,7 +65,7 @@ class BlastHit(object):
         @param  s_end   Hit end position of the subject
         @param  evalue  E value of the alignement
         @param  bscore Bit score of the alignement
-        @param  qseq Sequence of the query aligned on the reference
+        @param  q_seq
         """
 
         # Store parameters in self variables
@@ -74,13 +76,16 @@ class BlastHit(object):
         self.length = int(length)
         self.mis = int(mis)
         self.gap = int(gap)
-        self.q_start =  int(q_start)
-        self.q_end =  int(q_end)
-        self.s_start =  int(s_start)
-        self.s_end =  int(s_end)
+        self.q_start = int(q_start)
+        self.q_end = int(q_end)
+        self.s_start = int(s_start)
+        self.s_end = int(s_end)
         self.evalue = float(evalue)
         self.bscore = float(bscore)
-        self.qseq = qseq
+        self.q_seq = q_seq
+
+        # verify the hit validity
+        self._test_arg()
 
         # Orientation of the query and subject along the hit
         self.q_orient = int(q_start) < int(q_end)
@@ -91,8 +96,22 @@ class BlastHit(object):
         msg += "\tQuery\t{}:{}-{}({})\n".format(self.q_id, self.q_start, self.q_end, "+" if self.q_orient else "-")
         msg += "\tSubject\t{}:{}-{}({})\n".format(self.s_id, self.s_start, self.s_end, "+" if self.s_orient else "-")
         msg += "\tLenght : {}\tIdentity : {}%\tEvalue : {}\tBit score : {}\n".format(self.length, self.identity, self.evalue, self.bscore)
-        msg += "\tAligned query seq : {}\n".format(self.qseq)
+        msg += "\tAligned query seq : {}\n".format(self.q_seq)
         return (msg)
 
     def __str__(self):
         return "<Instance of {} from {} >\n".format(self.__class__.__name__, self.__module__)
+
+    #~~~~~~~PRIVATE METHODS~~~~~~~#
+
+    def _test_arg(self):
+        assert 0 <= self.identity <= 100, "Identity value out of range [0:100]"
+        assert self.length > 0, "length value out of range [> 0]"
+        assert self.mis >= 0, "mis value out of range [>= 0]"
+        assert self.gap >= 0, "gap value out of range [>= 0]"
+        assert self.q_start >= 0, "q_start value out of range [>= 0]"
+        assert self.q_end >= 0, "q_end value out of range [>= 0]"
+        assert self.s_start >= 0, "s_start value out of range [>= 0]"
+        assert self.s_end >= 0, "s_end value out of range [>= 0]"
+        assert self.evalue >= 0, "evalue value out of range [>= 0]"
+        assert self.bscore >= 0, "bscore value out of range [>= 0]"

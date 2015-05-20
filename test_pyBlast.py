@@ -11,7 +11,10 @@
 """
 
 # Standard library packages import
-import sys, os, random, string
+import sys, os, string, tempfile
+from random import randint as ri
+from random import uniform as rf
+from random import choice as rc
 
 # Third party packages import
 import pytest
@@ -19,40 +22,109 @@ import pytest
 # Import the current working dir in the python path to allow local package imports
 sys.path.append(os.getcwd())
 
-# Start tests
-def test_MakeBlastDB():
-    from MakeBlastDB import MakeBlastDB
-    db_maker = MakeBlastDB()
-    assert(db_maker (
-            ref_path= "./test/Reference.fa" ,
-            db_path= "./test/Reference"))
+# HELPER FUNCTIONS AND CLASSES ####################################################################
 
-def test_BlastHit():
+def rs (length):
+    """Generate a random string"""
+    return ''.join(rc(string.ascii_lowercase + string.digits) for _ in range(length))
+
+def rDNA (length):
+    """Generate a random DNA string"""
+    return ''.join(rc(["A","T","C","G"]) for _ in range(length))
+
+
+# TESTS BLAST HIT #################################################################################
+
+# Define parameters for the test_BlastHit function with a pytest decorator
+@pytest.mark.parametrize("q_id, s_id, identity, length, mis, gap, q_start, q_end, s_start, s_end, evalue, bscore, q_seq", [
+    (rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,10), rf(0,100), rDNA (30)),
+    pytest.mark.xfail((rs(10), rs(10), -1, ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
+    pytest.mark.xfail((rs(10), rs(10), rf(0,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
+    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
+    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
+    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), -1, ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
+    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), -1, ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
+    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
+    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, rf(0,100), rf(0,100), rDNA (30))),
+    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, rf(0,100), rDNA (30))),
+    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), -1, rDNA (30)))
+    ])
+
+def test_BlastHit(q_id, s_id, identity, length, mis,gap, q_start, q_end, s_start, s_end, evalue, bscore, q_seq):
+    """Test BlastHit success and with failure with various parameters"""
     from BlastHit import BlastHit
+    BlastHit(q_id, s_id, identity, length, mis,gap, q_start, q_end, s_start, s_end, evalue, bscore, q_seq)
+
+# TESTS BLASTN ####################################################################################
+
+class rand_subject_query_files (object):
+    """Small helper class to generates fasta file on the fly"""
+
+    DNA_COMPLEMENT = {"A":"T","T":"A","C":"G","G":"C"}
+
+    def __init__(self, len_subject, len_query, random_query=False):
+        """"""
+        print ("Create reference and query fasta files")
+        self.s_seq = rDNA(len_subject)
+
+        # Generate either a random query sequence in forward or reverse orientation from the subject sequence
+        if random_query:
+            self.s_orient, self.s_start, self.s_end = True, 0, 0
+            self.q_seq = rDNA(len_query)
+        elif ri(0,1):
+            self.s_orient = True
+            self.s_start = ri(0, len_subject-len_query)
+            self.s_end = self.s_start + len_query
+            self.q_seq = self.s_seq [self.s_start:self.s_end]
+        else:
+            self.s_orient = False
+            self.s_end = ri(0, len_subject-len_query)
+            self.s_start = self.s_end + len_query
+            self.q_seq = "".join ([self.DNA_COMPLEMENT[base] for base in self.s_seq[self.s_start-1:self.s_end-1:-1]])
+
+        # Write files in temporary directories
+        self.s_path = tempfile.mkstemp()[1]
+        with open (self.s_path, "w") as fp:
+            fp.write (">ref\n{}\n".format(self.s_seq))
+
+        self.q_path = tempfile.mkstemp()[1]
+        with open (self.q_path, "w") as fp:
+            fp.write (">query\n{}\n".format(self.q_seq))
+
+    # Enter and exit are defined to use the with statement
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        """Destructor to remove the database and unziped fasta files if needed"""
+        print ("Destroy fasta files")
+        os.remove(self.s_path)
+        os.remove(self.q_path)
+
+def test_Blastn_hit():
+    """Test Blastn class with simulated datasets when query are generated from the subject sequence"""
+
+    # Import and create temp fasta
+    from Blastn import Blastn
+
     for _ in range (100):
-        assert(BlastHit(
-                q_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10)),
-                s_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10)),
-                identity = random.uniform(0, 1),
-                length = random.randint(1, 100),
-                mis = random.randint(0, 100),
-                gap = random.randint(0, 100),
-                q_start = random.randint(0, 100),
-                q_end = random.randint(0, 100),
-                s_start = random.randint(0, 100),
-                s_end = random.randint(0, 100),
-                evalue = random.uniform(0, 1),
-                bscore = random.uniform(0, 100),
-                qseq = ''.join(random.choice(["A","T","C","G"]) for _ in range(20))))
+        with rand_subject_query_files(200, 20, random_query=False) as r:
+            with Blastn(r.s_path) as blastn:
+                hit_list = blastn(r.q_path)
+                assert len(hit_list) == 1
+                assert hit.s_orient == r.s_orient
+                assert hit.s_start == r.s_start
+                assert hit.s_end == r.s_end
+                assert hit.q_seq == r.q_seq
 
-def test_MakeBlastn():
-    from MakeBlastn import MakeBlastn
-    for _ in range (10):
-        blast_maker = MakeBlastn(
-            task = random.choice(['blastn', 'blastn-short', 'dc-megablast', 'megablast', 'rmblastn']),
-            evalue = random.uniform(0, 1),
-            best_per_query_seq = random.choice([True, False]))
+def test_Blastn_nohit():
+    """Test Blastn class with simulated datasets when query are randomly generated"""
 
-        assert(blast_maker(
-                query_path="./test/query_sample.fa",
-                db_path="./test/Reference" ))
+    # Import and create temp fasta
+    from Blastn import Blastn
+
+    for _ in range (100):
+        with rand_subject_query_files(200, 20, random_query=True) as r:
+            with Blastn(r.s_path) as blastn:
+                hit_list = blastn(r.q_path)
+                assert hit_list == None
