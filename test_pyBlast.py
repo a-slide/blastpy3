@@ -2,7 +2,7 @@
 
 """
 @package    pyBlast
-@brief      Test function to be used with python package pytest
+@brief      Test functions to be used with python package pytest
 @copyright  [GNU General Public License v2](http://www.gnu.org/licenses/gpl-2.0.html)
 @author     Adrien Leger - 2014
 * <adrien.leger@gmail.com> <adrien.leger@inserm.fr> <adrien.leger@univ-nantes.fr>
@@ -32,33 +32,32 @@ def rDNA (length):
     """Generate a random DNA string"""
     return ''.join(rc(["A","T","C","G"]) for _ in range(length))
 
-
 # TESTS BLAST HIT #################################################################################
 
 # Define parameters for the test_BlastHit function with a pytest decorator
-@pytest.mark.parametrize("q_id, s_id, identity, length, mis, gap, q_start, q_end, s_start, s_end, evalue, bscore, q_seq", [
-    (rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,10), rf(0,100), rDNA (30)),
-    pytest.mark.xfail((rs(10), rs(10), -1, ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
-    pytest.mark.xfail((rs(10), rs(10), rf(0,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
-    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
-    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
-    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), -1, ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
-    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), -1, ri(0,100), ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
-    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, ri(0,100), rf(0,100), rf(0,100), rDNA (30))),
-    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, rf(0,100), rf(0,100), rDNA (30))),
-    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, rf(0,100), rDNA (30))),
-    pytest.mark.xfail((rs(10), rs(10), rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), -1, rDNA (30)))
+@pytest.mark.parametrize("identity, length, mis, gap, q_start, q_end, s_start, s_end, evalue, bscore", [
+    (rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,10), rf(0,100)),
+    pytest.mark.xfail((-1, ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail(( rf(0,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), -1, ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), -1, ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, ri(0,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), -1))
     ])
 
-def test_BlastHit(q_id, s_id, identity, length, mis,gap, q_start, q_end, s_start, s_end, evalue, bscore, q_seq):
-    """Test BlastHit success and with failure with various parameters"""
+# Test BlastHit success and with failure with various parameters
+def test_BlastHit(identity, length, mis,gap, q_start, q_end, s_start, s_end, evalue, bscore):
     from BlastHit import BlastHit
-    BlastHit(q_id, s_id, identity, length, mis,gap, q_start, q_end, s_start, s_end, evalue, bscore, q_seq)
+    BlastHit(rs(10), rs(10), identity, length, mis,gap, q_start, q_end, s_start, s_end, evalue, bscore, rDNA(30))
 
 # TESTS BLASTN ####################################################################################
 
+#Helper class to generates fasta file on the fly
 class rand_subject_query_files (object):
-    """Small helper class to generates fasta file on the fly"""
 
     DNA_COMPLEMENT = {"A":"T","T":"A","C":"G","G":"C"}
 
@@ -69,15 +68,14 @@ class rand_subject_query_files (object):
 
         # Generate either a random query sequence in forward or reverse orientation from the subject sequence
         if random_query:
-            self.s_orient, self.s_start, self.s_end = True, 0, 0
             self.q_seq = rDNA(len_query)
         elif ri(0,1):
-            self.s_orient = True
+            self.s_orient = "+"
             self.s_start = ri(0, len_subject-len_query)
             self.s_end = self.s_start + len_query
             self.q_seq = self.s_seq [self.s_start:self.s_end]
         else:
-            self.s_orient = False
+            self.s_orient = "-"
             self.s_end = ri(0, len_subject-len_query)
             self.s_start = self.s_end + len_query
             self.q_seq = "".join ([self.DNA_COMPLEMENT[base] for base in self.s_seq[self.s_start-1:self.s_end-1:-1]])
@@ -101,30 +99,29 @@ class rand_subject_query_files (object):
         os.remove(self.s_path)
         os.remove(self.q_path)
 
-def test_Blastn_hit():
-    """Test Blastn class with simulated datasets when query are generated from the subject sequence"""
+@pytest.fixture (params=['blastn', 'blastn-short', 'dc-megablast', 'megablast', 'rmblastn'])
+def task (request):
+    return request.param
 
-    # Import and create temp fasta
+@pytest.fixture (params=[False, pytest.mark.xfail(True)], ids=["Queries from Subject", "Random queries"])
+def random_query (request):
+    return request.param
+
+#Test Blastn class with simulated datasets when query are generated from the subject sequence
+def test_Blastn_hit(task, random_query):
     from Blastn import Blastn
 
-    for _ in range (100):
-        with rand_subject_query_files(200, 20, random_query=False) as r:
+    # Loop to try different random combinations
+    for _ in range (5):
+        with rand_subject_query_files(500, 50, random_query=random_query) as r:
+
+            # Instantiate the database and perform a blastn
             with Blastn(r.s_path) as blastn:
-                hit_list = blastn(r.q_path)
-                assert len(hit_list) == 1
-                assert hit.s_orient == r.s_orient
-                assert hit.s_start == r.s_start
-                assert hit.s_end == r.s_end
-                assert hit.q_seq == r.q_seq
+                hit_list = blastn(query_path=r.q_path, task=task, best_query_hit=True, evalue=1)
 
-def test_Blastn_nohit():
-    """Test Blastn class with simulated datasets when query are randomly generated"""
-
-    # Import and create temp fasta
-    from Blastn import Blastn
-
-    for _ in range (100):
-        with rand_subject_query_files(200, 20, random_query=True) as r:
-            with Blastn(r.s_path) as blastn:
-                hit_list = blastn(r.q_path)
-                assert hit_list == None
+                # Test values in hit_list
+                assert len(hit_list) >= 1
+                assert hit_list[0].s_orient == r.s_orient
+                assert hit_list[0].s_start == r.s_start
+                assert hit_list[0].s_end == r.s_end
+                assert hit_list[0].q_seq == r.q_seq

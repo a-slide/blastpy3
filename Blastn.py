@@ -101,7 +101,7 @@ class Blastn(object):
     #~~~~~~~PUBLIC METHODS~~~~~~~#
 
     def __call__ (self, query_path, blast_exec="blastn", blastn_opt="", task="dc-megablast",
-        evalue=1, best_per_query_seq = False):
+        evalue=1, best_query_hit = False):
         """
         Blast query against a subject database and return a list of BlastHit object
         @param  query_path Path to a fasta file containing the query sequences
@@ -110,7 +110,7 @@ class Blastn(object):
         @param task Type of blast to be performed ('blastn' 'blastn-short' 'dc-megablast'
         'megablast' 'rmblastn'). By default "dc-megablast"
         @param evalue E Value cuttoff to retain alignments
-        @param best_per_query_seq find and return only the best hit per query
+        @param best_query_hit find and return only the best hit per query
         @return A list of BlastHit objects if at least one hit was found
         """
 
@@ -136,7 +136,7 @@ class Blastn(object):
             return None
 
         # Return a simple list if the unicity of hit per query is not required
-        if not best_per_query_seq:
+        if not best_query_hit:
             hit_list = []
             for line in stdout.splitlines():
                 # split the line in a list and send the expanded list to blasthit
