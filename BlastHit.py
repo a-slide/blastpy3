@@ -31,7 +31,20 @@ class BlastHit(object):
 
     #~~~~~~~FONDAMENTAL METHODS~~~~~~~#
 
-    def __init__(self, q_id, s_id, identity, length, mis, gap, q_start, q_end, s_start, s_end, evalue, bscore, q_seq):
+    def __init__(self,
+        q_id = "query",
+        s_id = "subject",
+        identity = 100,
+        length = 0,
+        mis = 0,
+        gap = 0,
+        q_start = 0,
+        q_end = 0,
+        s_start = 0,
+        s_end = 0,
+        evalue = 0,
+        bscore = 0,
+        q_seq = "ATCG"):
         """
         Create a BlastHit object which is automatically added to the class tracking instance list
         The object with the following parameters are required for object initialisation
@@ -100,12 +113,12 @@ class BlastHit(object):
 
     def _test_arg(self):
         assert 0 <= self.identity <= 100, "Identity value out of range [0:100]"
-        assert self.length >= 0, "length value out of range [>= 0]"
-        assert self.mis >= 0, "mis value out of range [>= 0]"
-        assert self.gap >= 0, "gap value out of range [>= 0]"
-        assert self.q_start >= 0, "q_start value out of range [>= 0]"
-        assert self.q_end >= 0, "q_end value out of range [>= 0]"
-        assert self.s_start >= 0, "s_start value out of range [>= 0]"
-        assert self.s_end >= 0, "s_end value out of range [>= 0]"
-        assert self.evalue >= 0, "evalue value out of range [>= 0]"
-        assert self.bscore >= 0, "bscore value out of range [>= 0]"
+        assert self.length > -1, "length value out of range [>= 0]"
+        assert self.mis > -1, "mis value out of range [>= 0]"
+        assert self.gap > -1, "gap value out of range [>= 0]"
+        assert self.q_start > -1, "q_start value out of range [>= 0]"
+        assert self.q_end > -1, "q_end value out of range [>= 0]"
+        assert self.s_start > -1, "s_start value out of range [>= 0]"
+        assert self.s_end > -1, "s_end value out of range [>= 0]"
+        assert self.evalue > -1, "evalue value out of range [>= 0]"
+        assert self.bscore > -1, "bscore value out of range [>= 0]"
