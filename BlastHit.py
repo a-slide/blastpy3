@@ -100,7 +100,7 @@ class BlastHit(object):
 
     def _test_arg(self):
         assert 0 <= self.identity <= 100, "Identity value out of range [0:100]"
-        assert self.length > 0, "length value out of range [> 0]"
+        assert self.length >= 0, "length value out of range [>= 0]"
         assert self.mis >= 0, "mis value out of range [>= 0]"
         assert self.gap >= 0, "gap value out of range [>= 0]"
         assert self.q_start >= 0, "q_start value out of range [>= 0]"

@@ -108,7 +108,7 @@ def random_query (request):
     return request.param
 
 #Test Blastn class with simulated datasets when query are generated from the subject sequence
-def test_Blastn_hit(task, random_query):
+def test_Blastn(task, random_query):
     from Blastn import Blastn
 
     # Loop to try different random combinations
