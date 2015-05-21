@@ -98,7 +98,7 @@ class BlastHit(object):
         # Verify the hit validity
         self._test_arg()
 
-    def __repr__(self):
+    def __str__(self):
         msg = "HIT {}".format(self.id)
         msg += "\tQuery\t{}:{}-{}({})\n".format(self.q_id, self.q_start, self.q_end, self.q_orient)
         msg += "\tSubject\t{}:{}-{}({})\n".format(self.s_id, self.s_start, self.s_end, self.s_orient)
@@ -106,7 +106,7 @@ class BlastHit(object):
         msg += "\tAligned query seq : {}\n".format(self.q_seq)
         return (msg)
 
-    def __str__(self):
+    def __repr__(self):
         return "<Instance of {} from {} >\n".format(self.__class__.__name__, self.__module__)
 
     #~~~~~~~PRIVATE METHODS~~~~~~~#
