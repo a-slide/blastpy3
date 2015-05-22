@@ -35,32 +35,32 @@ class BlastHit(object):
         q_id = "query",
         s_id = "subject",
         identity = 100,
-        length = 0,
+        length = 10,
         mis = 0,
         gap = 0,
-        q_start = 0,
-        q_end = 0,
-        s_start = 0,
-        s_end = 0,
+        q_start = 1,
+        q_end = 10,
+        s_start = 1,
+        s_end = 10,
         evalue = 0,
         bscore = 0,
         q_seq = "ATCG"):
         """
         Create a BlastHit object which is automatically added to the class tracking instance list
         The object with the following parameters are required for object initialisation
-        @param  q_id    Query sequence name
-        @param  s_id    Subject sequence name
-        @param  identity    % of identity in the hit
-        @param  length  length of the hit
-        @param  mis Number of mismatch in the hit
-        @param  gap Number of gap in the hit
-        @param  q_start Hit start position of the query
-        @param  q_end   Hit end position of the query
-        @param  s_start Hit start position of the subject
-        @param  s_end   Hit end position of the subject
-        @param  evalue  E value of the alignement
-        @param  bscore Bit score of the alignement
-        @param  q_seq Sequence of the query aligned on the subject sequence
+        @param  q_id    Query sequence name [STR]
+        @param  s_id    Subject sequence name [STR]
+        @param  identity    % of identity in the hit [FLOAT 0:100]
+        @param  length  length of the hit [INT >=1]
+        @param  mis Number of mismatch in the hit [INT >=0]
+        @param  gap Number of gap in the hit [INT >=0]
+        @param  q_start Hit start position of the query (1 based) [INT >=1]
+        @param  q_end   Hit end position of the query (1 based) [INT >=1]
+        @param  s_start Hit start position of the subject (1 based) [INT >=1]
+        @param  s_end   Hit end position of the subject (1 based) [INT >=1]
+        @param  evalue  E value of the alignement [FLOAT >=0]
+        @param  bscore Bit score of the alignement [FLOAT >=0]
+        @param  q_seq Sequence of the query aligned on the subject sequence [STR]
         """
 
         # Store parameters in self variables
@@ -112,12 +112,12 @@ class BlastHit(object):
 
     def _test_arg(self):
         assert 0 <= self.identity <= 100, "Identity value out of range [0:100]"
-        assert self.length > -1, "length value out of range [>= 0]"
-        assert self.mis > -1, "mis value out of range [>= 0]"
-        assert self.gap > -1, "gap value out of range [>= 0]"
-        assert self.q_start > -1, "q_start value out of range [>= 0]"
-        assert self.q_end > -1, "q_end value out of range [>= 0]"
-        assert self.s_start > -1, "s_start value out of range [>= 0]"
-        assert self.s_end > -1, "s_end value out of range [>= 0]"
-        assert self.evalue > -1, "evalue value out of range [>= 0]"
-        assert self.bscore > -1, "bscore value out of range [>= 0]"
+        assert self.length >= 1, "length value out of range [>= 1]"
+        assert self.mis >= 0, "mis value out of range [>= 0]"
+        assert self.gap >= 0, "gap value out of range [>= 0]"
+        assert self.q_start >= 0, "q_start value out of range [>= 1]"
+        assert self.q_end >= 0, "q_end value out of range [>= 1]"
+        assert self.s_start >= 0, "s_start value out of range [>= 1]"
+        assert self.s_end >= 0, "s_end value out of range [>= 1]"
+        assert self.evalue >= 0, "evalue value out of range [>= 0]"
+        assert self.bscore >= 0, "bscore value out of range [>= 0]"

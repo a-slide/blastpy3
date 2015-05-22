@@ -80,17 +80,17 @@ class rand_subject_query_files (object):
 
 # Define parameters for the test_BlastHit function with a pytest decorator
 @pytest.mark.parametrize("identity, length, mis, gap, q_start, q_end, s_start, s_end, evalue, bscore", [
-    (rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,10), rf(0,100)),
-    pytest.mark.xfail((-1, ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
-    pytest.mark.xfail((rf(0,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
-    pytest.mark.xfail((rf(0,100), ri(1,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
-    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), -1, ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
-    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), -1, ri(0,100), ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
-    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), -1, ri(0,100), ri(0,100), rf(0,100), rf(0,100))),
-    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, ri(0,100), rf(0,100), rf(0,100))),
-    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, rf(0,100), rf(0,100))),
-    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), -1, rf(0,100))),
-    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), ri(0,100), rf(0,100), -1))
+    (rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(1,100), ri(1,100), ri(1,100), ri(1,100), rf(0,10), rf(0,100)),
+    pytest.mark.xfail((-1, ri(1,100), ri(0,100), ri(0,100), ri(1,100), ri(1,100), ri(1,100), ri(1,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), -1, ri(0,100), ri(0,100), ri(1,100), ri(1,100), ri(1,100), ri(1,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), -1, ri(0,100), ri(1,100), ri(1,100), ri(1,100), ri(1,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), -1, ri(1,100), ri(1,100), ri(1,100), ri(1,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), -1, ri(1,100), ri(1,100), ri(1,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(1,100), -1, ri(1,100), ri(1,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(1,100), ri(1,100), -1, ri(1,100), rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(1,100), ri(1,100), ri(1,100), -1, rf(0,100), rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(1,100), ri(1,100), ri(1,100), ri(1,100), -1, rf(0,100))),
+    pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(1,100), ri(1,100), ri(1,100), ri(1,100), rf(0,100), -1))
     ])
 
 # Test BlastHit success and with failure with various parameters
