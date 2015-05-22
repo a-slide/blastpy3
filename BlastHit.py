@@ -89,7 +89,6 @@ class BlastHit(object):
             self.s_orient = "+"
             self.s_start = int(s_start)-1
             self.s_end = int(s_end)
-
         else:
             self.s_orient = "-"
             self.s_start = int(s_start)

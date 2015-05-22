@@ -36,10 +36,12 @@ class Blastn(object):
         dbtype="nucl", input_type="fasta"):
         """
         Create a blastdb from a reference fastq file
-        @param makeblastdb_exec Path of the makeblastdb executable by default "makeblastdb"
-        @param makeblastdb_opt makeblastdb command line options as a string
-        @param dbtype Molecule type of target db ('nucl', 'prot')
-        @param input_type Type of the data specified in input_file ('asn1_bin', 'asn1_txt', 'blastdb', 'fasta')
+        @param ref_path Path to the reference fasta file (not gzipped). Mandatory
+        @param makeblastdb_exec Path of the makeblastdb executable. Default = "makeblastdb"
+        @param makeblastdb_opt makeblastdb command line options as a string. Default = ""
+        @param dbtype Molecule type of target db ('nucl', 'prot'). Default = "nucl"
+        @param input_type Type of the data specified in input_file ('asn1_bin', 'asn1_txt',
+        'blastdb', 'fasta'). Default = "fasta"
         """
         # Creating object variables
         self.ref_path = ref_path
@@ -56,7 +58,6 @@ class Blastn(object):
             self.ref_path, self.db_path)
 
         print ("CREATE DATABASE: {}\n".format(cmd))
-
         # Run the command line without stdin and asking both stdout and stderr
         try:
             # Execute the command line in the default shell
@@ -73,7 +74,7 @@ class Blastn(object):
 
         except Exception as E:
             print (E)
-            self._rm_db()
+            self.rm_db()
             self.db_dir = self.db_path = None
 
     # Enter and exit are defined to use the with statement
@@ -83,7 +84,7 @@ class Blastn(object):
     def __exit__(self, type, value, traceback):
         """Destructor to remove the database and unziped fasta files if needed"""
         if self.db_dir:
-            self._rm_db()
+            self.rm_db()
 
     # Typical string methods
     def __str__(self):
@@ -104,13 +105,13 @@ class Blastn(object):
         evalue=1, best_query_hit = False):
         """
         Blast query against a subject database and return a list of BlastHit object
-        @param  query_path Path to a fasta file containing the query sequences
-        @param blast_exec Path of the blast executable. By Default blastn will be used
-        @param blastn_opt Blastn command line options as a string
+        @param  query_path Path to a fasta file containing the query sequences (not gzipped). Mandatory
+        @param blast_exec Path of the blast executable. By Default blastn will be used. Default = "blastn"
+        @param blastn_opt Blastn command line options as a string. Default = ""
         @param task Type of blast to be performed ('blastn' 'blastn-short' 'dc-megablast'
-        'megablast' 'rmblastn'). By default "dc-megablast"
-        @param evalue E Value cuttoff to retain alignments
-        @param best_query_hit find and return only the best hit per query
+        'megablast' 'rmblastn'). Default = "dc-megablast"
+        @param evalue E Value cuttoff to retain alignments. Default = 1
+        @param best_query_hit find and return only the best hit per query. Default = False
         @return A list of BlastHit objects if at least one hit was found
         """
 
@@ -118,8 +119,6 @@ class Blastn(object):
             blast_exec, blastn_opt, cpu_count(), task, evalue, query_path, self.db_path)
 
         print ("MAKE BLAST: {}\n".format(cmd))
-
-
         # Execute the command line in the default shell
         proc = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
         stdout, stderr = proc.communicate()
@@ -175,8 +174,6 @@ class Blastn(object):
         print ("\t{} hits retained".format(len(hit_list)))
         return hit_list
 
-    #~~~~~~~PRIVATE METHODS~~~~~~~#
-
-    def _rm_db(self):
+    def rm_db(self):
         print ("Cleaning up blast DB files for \"{}\"\n".format(self.db_basename))
         rmtree(self.db_dir)
