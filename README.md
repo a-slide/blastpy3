@@ -1,6 +1,6 @@
 # pyBlast 0.1
 
-See [GitHub page](https://github.com/a-slide/pyBlast)
+See [GitHub page]( http://a-slide.github.io/pyBlast)
 
 **Simple and lightweight Python 2.7 wrapper module for NCBI BLAST+**
 
