@@ -44,7 +44,7 @@ class BlastHit(object):
         s_end = 10,
         evalue = 0,
         bscore = 0,
-        q_seq = "ATCG"):
+        q_seq = "NNNNNNNNNN"):
         """
         Create a BlastHit object which is automatically added to the class tracking instance list
         The object with the following parameters are required for object initialisation
@@ -73,7 +73,7 @@ class BlastHit(object):
         self.gap = int(gap)
         self.evalue = float(evalue)
         self.bscore = float(bscore)
-        self.q_seq = q_seq
+        self.q_seq = q_seq ################################### TO DO = REMOVE ILLEGAL CHAR IN SEQ ?
 
         # Correct coordinates of hit for python 0 based coordinates depending of the orientation
         if int(q_start) < int(q_end):

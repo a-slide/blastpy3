@@ -30,16 +30,16 @@ from Blastn import Blastn
 
 # HELPER FUNCTIONS AND CLASSES ####################################################################
 
-"""Generate a random string"""
 def rs (length):
+    """Generate a random string"""
     return ''.join(rc(string.ascii_lowercase + string.digits) for _ in range(length))
 
-"""Generate a random DNA string"""
 def rDNA (length):
+    """Generate a random DNA string"""
     return ''.join(rc(["A","T","C","G"]) for _ in range(length))
 
-"""Helper class to generates fasta file on the fly"""
 class rand_subject_query_files (object):
+    """Helper class to generates fasta file on the fly"""
     DNA_COMPLEMENT = {"A":"T","T":"A","C":"G","G":"C"}
 
     def __init__(self, len_subject, len_query, random_query=False):
@@ -93,8 +93,8 @@ class rand_subject_query_files (object):
     pytest.mark.xfail((rf(0,100), ri(1,100), ri(0,100), ri(0,100), ri(1,100), ri(1,100), ri(1,100), ri(1,100), rf(0,100), -1))
     ])
 
-# Test BlastHit success and with failure with various parameters
 def test_BlastHit(identity, length, mis, gap, q_start, q_end, s_start, s_end, evalue, bscore):
+    """Test BlastHit success and with failure with various parameters"""
     BlastHit(identity=identity, length=length, mis=mis, gap=gap, q_start=q_start, q_end=q_end,
         s_start=s_start, s_end=s_end, evalue=evalue, bscore=bscore)
 
@@ -108,8 +108,8 @@ def task (request):
 def random_query (request):
     return request.param
 
-"""Test Blastn class with simulated datasets when query are generated from the subject sequence"""
 def test_Blastn(task, random_query):
+    """Test Blastn class with simulated datasets when query are generated from the subject sequence"""
     # Loop to try different random combinations
     for _ in range (5):
         with rand_subject_query_files(500, 50, random_query=random_query) as r:
