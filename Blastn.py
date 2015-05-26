@@ -77,7 +77,7 @@ class Blastn(object):
             self.rm_db()
             self.db_dir = self.db_path = None
 
-    # Enter and exit are defined to use the with statement
+    # Enter and exit are defined to use the context manager "with"
     def __enter__(self):
         return self
 
