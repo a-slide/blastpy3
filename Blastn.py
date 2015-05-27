@@ -57,7 +57,7 @@ class Blastn(object):
             self.makeblastdb_exec, self.makeblastdb_opt, self.dbtype, self.input_type,
             self.ref_path, self.db_path)
 
-        print ("CREATE DATABASE: {}\n".format(cmd))
+        #~ print ("CREATE DATABASE: {}\n".format(cmd))
         # Run the command line without stdin and asking both stdout and stderr
         try:
             # Execute the command line in the default shell
@@ -119,7 +119,7 @@ class Blastn(object):
         cmd = "{} {} -num_threads {} -task {} -evalue {} -outfmt \"6 std qseq\" -dust no -query {} -db {}".format(
             blastn_exec, blastn_opt, cpu_count(), task, evalue, query_path, self.db_path)
 
-        print ("MAKE BLAST: {}\n".format(cmd))
+        #~ print ("MAKE BLAST: {}\n".format(cmd))
         # Execute the command line in the default shell
         proc = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
         stdout, stderr = proc.communicate()
