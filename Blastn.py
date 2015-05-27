@@ -32,7 +32,7 @@ class Blastn(object):
 
     #~~~~~~~FONDAMENTAL METHODS~~~~~~~#
 
-    def __init__ (self, ref_path, makeblastdb_exec="makeblastdb", makeblastdb_opt="",
+    def __init__ (self, ref_path, makeblastdb_exec="", makeblastdb_opt="",
         dbtype="nucl", input_type="fasta"):
         """
         Create a blastdb from a reference fastq file
@@ -45,7 +45,7 @@ class Blastn(object):
         """
         # Creating object variables
         self.ref_path = ref_path
-        self.makeblastdb_exec = makeblastdb_exec
+        self.makeblastdb_exec = makeblastdb_exec if makeblastdb_exec else "makeblastdb"
         self.makeblastdb_opt = makeblastdb_opt
         self.dbtype = dbtype
         self.input_type = input_type
@@ -101,12 +101,12 @@ class Blastn(object):
 
     #~~~~~~~PUBLIC METHODS~~~~~~~#
 
-    def __call__ (self, query_path, blast_exec="blastn", blastn_opt="", task="dc-megablast",
+    def __call__ (self, query_path, blastn_exec="", blastn_opt="", task="dc-megablast",
         evalue=1, best_query_hit = False):
         """
         Blast query against a subject database and return a list of BlastHit object
         @param  query_path Path to a fasta file containing the query sequences (not gzipped). Mandatory
-        @param blast_exec Path of the blast executable. By Default blastn will be used. Default = "blastn"
+        @param blastn_exec Path of the blast executable. By Default blastn will be used. Default = "blastn"
         @param blastn_opt Blastn command line options as a string. Default = ""
         @param task Type of blast to be performed ('blastn' 'blastn-short' 'dc-megablast'
         'megablast' 'rmblastn'). Default = "dc-megablast"
@@ -114,9 +114,10 @@ class Blastn(object):
         @param best_query_hit find and return only the best hit per query. Default = False
         @return A list of BlastHit objects if at least one hit was found
         """
+        blastn_exec = blastn_exec if blastn_exec else "blastn"
 
         cmd = "{} {} -num_threads {} -task {} -evalue {} -outfmt \"6 std qseq\" -dust no -query {} -db {}".format(
-            blast_exec, blastn_opt, cpu_count(), task, evalue, query_path, self.db_path)
+            blastn_exec, blastn_opt, cpu_count(), task, evalue, query_path, self.db_path)
 
         print ("MAKE BLAST: {}\n".format(cmd))
         # Execute the command line in the default shell
