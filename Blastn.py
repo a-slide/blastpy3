@@ -177,5 +177,5 @@ class Blastn(object):
         return hit_list
 
     def rm_db(self):
-        print (" * Cleaning up blast DB files for \"{}\"\n".format(self.db_basename))
+        print (" * Cleaning up blast DB files for \"{}\"".format(self.db_basename))
         rmtree(self.db_dir)
