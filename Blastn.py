@@ -102,7 +102,7 @@ class Blastn(object):
     #~~~~~~~PUBLIC METHODS~~~~~~~#
 
     def __call__ (self, query_path, blastn_exec="", blastn_opt="", task="dc-megablast",
-        evalue=1, best_query_hit = False):
+        evalue=1, best_query_hit=False):
         """
         Blast query against a subject database and return a list of BlastHit object
         @param  query_path Path to a fasta file containing the query sequences (not gzipped). Mandatory
@@ -114,6 +114,7 @@ class Blastn(object):
         @param best_query_hit find and return only the best hit per query. Default = False
         @return A list of BlastHit objects if at least one hit was found
         """
+
         blastn_exec = blastn_exec if blastn_exec else "blastn"
 
         cmd = "{} {} -num_threads {} -task {} -evalue {} -outfmt \"6 std qseq\" -dust no -query {} -db {}".format(
@@ -143,7 +144,7 @@ class Blastn(object):
                 hit_split = line.split()
                 hit_list.append(BlastHit(*hit_split))
 
-            print ("\t{} hits found".format(len(hit_list)))
+            #~ print ("\t{} hits found".format(len(hit_list)))
             return hit_list
 
         # The most complicated situation where only the best hit per query is returned
@@ -159,7 +160,7 @@ class Blastn(object):
             else:
                 hit_dict[query_id] = [BlastHit(*hit_split)]
 
-        print ("\t{} hits found from {} query".format(i, len(hit_dict)))
+        #~ print ("\t{} hits found from {} query".format(i, len(hit_dict)))
 
         # Flatten the dictionary in a list keeping only the best alignment per query
         hit_list = []
@@ -172,9 +173,9 @@ class Blastn(object):
                     best_hit = hit
             hit_list.append(best_hit)
 
-        print ("\t{} hits retained".format(len(hit_list)))
+        #~ print ("\t{} hits retained".format(len(hit_list)))
         return hit_list
 
     def rm_db(self):
-        print ("Cleaning up blast DB files for \"{}\"\n".format(self.db_basename))
+        print (" * Cleaning up blast DB files for \"{}\"\n".format(self.db_basename))
         rmtree(self.db_dir)
