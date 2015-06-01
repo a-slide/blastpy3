@@ -20,13 +20,13 @@
 
     <section class="main-content">
       <h1>
-<a id="pyblast-01" class="anchor" href="#pyblast-01" aria-hidden="true"><span class="octicon octicon-link"></span></a>pyBlast 0.1</h1>
+<a id="pyblast-02" class="anchor" href="#pyblast-02" aria-hidden="true"><span class="octicon octicon-link"></span></a>pyBlast 0.2</h1>
 
 <p><strong>Simple and lightweight Python 2.7 wrapper module for NCBI BLAST+</strong></p>
 
 <p><strong>Creation : 2015/05/18</strong></p>
 
-<p><strong>Last update : 2015/05/22</strong></p>
+<p><strong>Last update : 2015/06/01</strong></p>
 
 <h2>
 <a id="blasthit" class="anchor" href="#blasthit" aria-hidden="true"><span class="octicon octicon-link"></span></a>BlastHit</h2>
@@ -53,6 +53,25 @@
 </ul>
 
 <p>The validity of numeric value is checked upon instantiation. Invalid values will raise assertion errors.</p>
+
+<p>BlastHit Objects can return a comprehensive report of themselves under the form of an ordered dictionnary:</p>
+
+<p><strong>code</strong></p>
+
+<pre><code># Interactive import
+from BlastHit import BlastHit
+
+# Create a default BlastHit object
+h = BlastHit()
+
+# Call the report method
+h.get_report(full = True)
+</code></pre>
+
+<p><strong>Output</strong></p>
+
+<pre><code>OrderedDict([('Query', 'query:0-10(+)'), ('Subject', 'subject:0-10(+)'), ('Identity', 100.0), ('Evalue', 0.0), ('Bit Score', 0.0), ('Hit length', 10), ('Number of gap', 0), ('Number of mismatch', 0)])
+</code></pre>
 
 <h2>
 <a id="blastn" class="anchor" href="#blastn" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blastn</h2>
