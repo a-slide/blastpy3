@@ -1,4 +1,4 @@
-# pyBlast 0.1
+# pyBlast 0.2
 
 See [GitHub page]( http://a-slide.github.io/pyBlast)
 
@@ -31,6 +31,23 @@ Python object representing a hit found by blastn. The object contains the follow
 
 The validity of numeric value is checked upon instantiation. Invalid values will raise assertion errors.
 
+BlastHit Objects can return a comprehensive report of themselves under the form of an ordered dictionnary:
+
+**code**
+```
+# Interactive import
+from BlastHit import BlastHit
+
+# Create a default BlastHit object
+h = BlastHit()
+
+# Call the report method
+h.get_report(full = True)
+```
+**Output**
+```
+OrderedDict([('Query', 'query:0-10(+)'), ('Subject', 'subject:0-10(+)'), ('Identity', 100.0), ('Evalue', 0.0), ('Bit Score', 0.0), ('Hit length', 10), ('Number of gap', 0), ('Number of mismatch', 0)])
+```
 ## Blastn
 
 This class contain the wrapper for Blastn and require the installation of ncbi Blast+ 2.2.28+.

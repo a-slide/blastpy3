@@ -10,6 +10,9 @@
 * [Atlantic Gene Therapies - INSERM 1089] (http://www.atlantic-gene-therapies.fr/)
 """
 
+# Standard library imports
+from collections import OrderedDict
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 class BlastHit(object):
     """
@@ -73,7 +76,7 @@ class BlastHit(object):
         self.gap = int(gap)
         self.evalue = float(evalue)
         self.bscore = float(bscore)
-        self.q_seq = q_seq ################################### TO DO = REMOVE ILLEGAL CHAR IN SEQ ?
+        self.q_seq = q_seq
 
         # Correct coordinates of hit for python 0 based coordinates depending of the orientation
         if int(q_start) < int(q_end):
@@ -107,6 +110,29 @@ class BlastHit(object):
 
     def __repr__(self):
         return "<Instance of {} from {} >\n".format(self.__class__.__name__, self.__module__)
+
+    #~~~~~~~PUBLIC METHODS~~~~~~~#
+
+    def get_report (self, full=False):
+        """
+        Generate a report under the form of an Ordered dictionary
+        @param full If true a dict containing all self parameters will be returned
+        """
+        report = OrderedDict ()
+        report["Query"] = "{}:{}-{}({})".format(
+            self.q_id, self.q_start, self.q_end, self.q_orient)
+        report["Subject"] = "{}:{}-{}({})".format(
+            self.s_id, self.s_start, self.s_end, self.s_orient)
+
+        if full:
+            report["Identity"] = self.identity
+            report["Evalue"] = self.evalue
+            report["Bit Score"] = self.bscore
+            report["Hit length"] = self.length
+            report["Number of gap"] = self.gap
+            report["Number of mismatch"] = self.mis
+
+        return report
 
     #~~~~~~~PRIVATE METHODS~~~~~~~#
 
