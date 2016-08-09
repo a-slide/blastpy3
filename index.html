@@ -5,7 +5,7 @@
     <title>Pyblast by a-slide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
@@ -20,16 +20,18 @@
 
     <section class="main-content">
       <h1>
-<a id="pyblast-02" class="anchor" href="#pyblast-02" aria-hidden="true"><span class="octicon octicon-link"></span></a>pyBlast 0.2</h1>
+<a id="pyblast-02" class="anchor" href="#pyblast-02" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>pyBlast 0.2</h1>
 
-<p><strong>Simple and lightweight Python 2.7 wrapper module for NCBI BLAST+</strong></p>
+<p>See <a href="http://a-slide.github.io/pyBlast">GitHub page</a></p>
+
+<p><strong>Simple and lightweight Python 2/3 wrapper module for NCBI BLAST+</strong></p>
 
 <p><strong>Creation : 2015/05/18</strong></p>
 
-<p><strong>Last update : 2015/06/01</strong></p>
+<p><strong>Last update : 2015/05/22</strong></p>
 
 <h2>
-<a id="blasthit" class="anchor" href="#blasthit" aria-hidden="true"><span class="octicon octicon-link"></span></a>BlastHit</h2>
+<a id="blasthit" class="anchor" href="#blasthit" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>BlastHit</h2>
 
 <p>Python object representing a hit found by blastn. The object contains the following public fields:</p>
 
@@ -74,12 +76,12 @@ h.get_report(full = True)
 </code></pre>
 
 <h2>
-<a id="blastn" class="anchor" href="#blastn" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blastn</h2>
+<a id="blastn" class="anchor" href="#blastn" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Blastn</h2>
 
 <p>This class contain the wrapper for Blastn and require the installation of ncbi Blast+ 2.2.28+.</p>
 
 <h3>
-<a id="setup-blastn-object-create-subject-database" class="anchor" href="#setup-blastn-object-create-subject-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup Blastn object: Create subject database</h3>
+<a id="setup-blastn-object-create-subject-database" class="anchor" href="#setup-blastn-object-create-subject-database" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup Blastn object: Create subject database</h3>
 
 <p>Upon instantiation, a database is created from the user-provided subject sequence. Database files are created in a temporary directory.
 The following parameters can be customized at Blastn objects instantiation</p>
@@ -119,7 +121,7 @@ Cleaning up blast DB files for "subject"
 </code></pre>
 
 <h3>
-<a id="calling-blastn-object-perform-blastn-and-return-a-list-of-hits" class="anchor" href="#calling-blastn-object-perform-blastn-and-return-a-list-of-hits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Calling Blastn object: Perform Blastn and return a list of hits</h3>
+<a id="calling-blastn-object-perform-blastn-and-return-a-list-of-hits" class="anchor" href="#calling-blastn-object-perform-blastn-and-return-a-list-of-hits" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Calling Blastn object: Perform Blastn and return a list of hits</h3>
 
 <p>The Blastn object can then be directly called, as many time as desired, with query fasta files, that can contain several sequences.
 The method will automatically call blastn in a multiprocessing fashion, using as many threads as possible.
@@ -166,7 +168,7 @@ Cleaning up blast DB files for "subject"
 </code></pre>
 
 <h2>
-<a id="testing-pyblast-module" class="anchor" href="#testing-pyblast-module" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing pyBlast module</h2>
+<a id="testing-pyblast-module" class="anchor" href="#testing-pyblast-module" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Testing pyBlast module</h2>
 
 <p>The module can be easily tested thanks to pytest</p>
 
@@ -209,7 +211,7 @@ test_pyBlast.py::test_Blastn[rmblastn-Random queries] xfail
 </code></pre>
 
 <h2>
-<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
 
 <ul>
 <li><a href="http://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&amp;DOC_TYPE=Download">ncbi Blast+ 2.2.28+</a></li>
@@ -219,7 +221,7 @@ test_pyBlast.py::test_Blastn[rmblastn-Random queries] xfail
 </ul>
 
 <h2>
-<a id="authors-and-contact" class="anchor" href="#authors-and-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contact</h2>
+<a id="authors-and-contact" class="anchor" href="#authors-and-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contact</h2>
 
 <p>Adrien Leger - 2015</p>
 
@@ -242,4 +244,3 @@ test_pyBlast.py::test_Blastn[rmblastn-Random queries] xfail
   
   </body>
 </html>
-
