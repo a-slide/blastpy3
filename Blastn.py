@@ -33,7 +33,7 @@ class Blastn(object):
     #~~~~~~~FONDAMENTAL METHODS~~~~~~~#
 
     def __init__ (self, ref_path, makeblastdb_exec="", makeblastdb_opt="",
-        dbtype="nucl", input_type="fasta"):
+        dbtype="nucl", input_type="fasta", verbose=False):
         """
         Create a blastdb from a reference fastq file
         @param ref_path Path to the reference fasta file (not gzipped). Mandatory
@@ -42,6 +42,7 @@ class Blastn(object):
         @param dbtype Molecule type of target db ('nucl', 'prot'). Default = "nucl"
         @param input_type Type of the data specified in input_file ('asn1_bin', 'asn1_txt',
         'blastdb', 'fasta'). Default = "fasta"
+        @param verbose highly talkative if True
         """
         # Creating object variables
         self.ref_path = ref_path
@@ -52,12 +53,15 @@ class Blastn(object):
         self.db_dir = mkdtemp()
         self.db_basename = self.ref_path.rpartition('/')[2].partition('.')[0]
         self.db_path = path.join(self.db_dir, self.db_basename)
-
+        self.verbose = verbose
+        
         cmd = "{} {} -dbtype {} -input_type {} -in {} -out {}".format(
             self.makeblastdb_exec, self.makeblastdb_opt, self.dbtype, self.input_type,
             self.ref_path, self.db_path)
 
-        #~ print ("CREATE DATABASE: {}\n".format(cmd))
+        if self.verbose:
+            print ("CREATE DATABASE: {}\n".format(cmd))
+            
         # Run the command line without stdin and asking both stdout and stderr
         try:
             # Execute the command line in the default shell
@@ -119,8 +123,9 @@ class Blastn(object):
 
         cmd = "{} {} -num_threads {} -task {} -evalue {} -outfmt \"6 std qseq\" -dust no -query {} -db {}".format(
             blastn_exec, blastn_opt, cpu_count(), task, evalue, query_path, self.db_path)
-
-        #~ print ("MAKE BLAST: {}\n".format(cmd))
+        
+        if self.verbose:
+            print ("MAKE BLAST: {}\n".format(cmd))
         # Execute the command line in the default shell
         proc = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
         stdout, stderr = proc.communicate()
@@ -134,7 +139,7 @@ class Blastn(object):
 
         # If no hit were found
         if not stdout:
-            return None
+            return []
 
         # Return a simple list if the unicity of hit per query is not required
         if not best_query_hit:
@@ -144,7 +149,8 @@ class Blastn(object):
                 hit_split = line.split()
                 hit_list.append(BlastHit(*hit_split))
 
-            #~ print ("\t{} hits found".format(len(hit_list)))
+            if self.verbose:
+                print ("\t{} hits found".format(len(hit_list)))
             return hit_list
 
         # The most complicated situation where only the best hit per query is returned
@@ -160,7 +166,8 @@ class Blastn(object):
             else:
                 hit_dict[query_id] = [BlastHit(*hit_split)]
 
-        #~ print ("\t{} hits found from {} query".format(i, len(hit_dict)))
+        if self.verbose:
+            print ("\t{} hits found from {} query".format(i, len(hit_dict)))
 
         # Flatten the dictionary in a list keeping only the best alignment per query
         hit_list = []
@@ -173,9 +180,11 @@ class Blastn(object):
                     best_hit = hit
             hit_list.append(best_hit)
 
-        #~ print ("\t{} hits retained".format(len(hit_list)))
+        if self.verbose:
+            print ("\t{} hits retained".format(len(hit_list)))
         return hit_list
 
     def rm_db(self):
-        print (" * Cleaning up blast DB files for \"{}\"".format(self.db_basename))
+        if self.verbose:
+            print (" * Cleaning up blast DB files for \"{}\"".format(self.db_basename))
         rmtree(self.db_dir)

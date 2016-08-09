@@ -2,7 +2,7 @@
 
 See [GitHub page]( http://a-slide.github.io/pyBlast)
 
-**Simple and lightweight Python 2.7 wrapper module for NCBI BLAST+**
+**Simple and lightweight Python 2/3 wrapper module for NCBI BLAST+**
 
 **Creation : 2015/05/18**
 

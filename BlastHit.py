@@ -68,15 +68,15 @@ class BlastHit(object):
 
         # Store parameters in self variables
         self.id = self.next_id()
-        self.q_id = q_id
-        self.s_id = s_id
+        self.q_id = q_id.decode() if type(q_id) == bytes else q_id
+        self.s_id = s_id.decode() if type(s_id) == bytes else s_id
         self.identity = float(identity)
         self.length = int(length)
         self.mis = int(mis)
         self.gap = int(gap)
         self.evalue = float(evalue)
         self.bscore = float(bscore)
-        self.q_seq = q_seq
+        self.q_seq = q_seq.decode() if type(q_seq) == bytes else q_seq
 
         # Correct coordinates of hit for python 0 based coordinates depending of the orientation
         if int(q_start) < int(q_end):
