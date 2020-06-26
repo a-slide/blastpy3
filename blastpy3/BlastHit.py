@@ -1,14 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-@package    pyBlast
-@brief      Class to represent the informations from a blast hit
-@copyright  [GNU General Public License v2](http://www.gnu.org/licenses/gpl-2.0.html)
-@author     Adrien Leger - 2014
-* <adrien.leger@gmail.com> <adrien.leger@inserm.fr> <adrien.leger@univ-nantes.fr>
-* [Github](https://github.com/a-slide)
-* [Atlantic Gene Therapies - INSERM 1089] (http://www.atlantic-gene-therapies.fr/)
-"""
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~IMPORTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 # Standard library imports
 from collections import OrderedDict
@@ -16,8 +8,7 @@ from collections import OrderedDict
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 class BlastHit(object):
     """
-    @class  BlastHit
-    @brief  Object oriented class containing informations of one blast hit
+    Object oriented class containing informations of one blast hit
     """
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -51,19 +42,32 @@ class BlastHit(object):
         """
         Create a BlastHit object which is automatically added to the class tracking instance list
         The object with the following parameters are required for object initialisation
-        @param  q_id    Query sequence name [STR]
-        @param  s_id    Subject sequence name [STR]
-        @param  identity    % of identity in the hit [FLOAT 0:100]
-        @param  length  length of the hit [INT >=1]
-        @param  mis Number of mismatch in the hit [INT >=0]
-        @param  gap Number of gap in the hit [INT >=0]
-        @param  q_start Hit start position of the query (1 based) [INT >=1]
-        @param  q_end   Hit end position of the query (1 based) [INT >=1]
-        @param  s_start Hit start position of the subject (1 based) [INT >=1]
-        @param  s_end   Hit end position of the subject (1 based) [INT >=1]
-        @param  evalue  E value of the alignement [FLOAT >=0]
-        @param  bscore Bit score of the alignement [FLOAT >=0]
-        @param  q_seq Sequence of the query aligned on the subject sequence [STR]
+        * q_id
+            Query sequence name [STR]
+        * s_id
+            Subject sequence name [STR]
+        * identity
+            % of identity in the hit [FLOAT 0:100]
+        * length
+            length of the hit [INT >=1]
+        * mis
+            Number of mismatch in the hit [INT >=0]
+        * gap
+            Number of gap in the hit [INT >=0]
+        * q_start
+            Hit start position of the query (1 based) [INT >=1]
+        * q_end
+            Hit end position of the query (1 based) [INT >=1]
+        * s_start
+            Hit start position of the subject (1 based) [INT >=1]
+        * s_end
+            Hit end position of the subject (1 based) [INT >=1]
+        * evalue
+            E value of the alignement [FLOAT >=0]
+        * bscore
+            Bit score of the alignement [FLOAT >=0]
+        * q_seq
+            Sequence of the query aligned on the subject sequence [STR]
         """
 
         # Store parameters in self variables
@@ -116,7 +120,6 @@ class BlastHit(object):
     def get_report (self, full=False):
         """
         Generate a report under the form of an Ordered dictionary
-        @param full If true a dict containing all self parameters will be returned
         """
         report = OrderedDict ()
         report["Query"] = "{}:{}-{}({})".format(

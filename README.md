@@ -1,12 +1,95 @@
-# pyBlast 0.2
+# Blastpy3
 
-See [GitHub page]( http://a-slide.github.io/pyBlast)
+[![PyPI version](https://badge.fury.io/py/blastpy3.svg)](https://badge.fury.io/py/blastpy3)
+[![Downloads](https://pepy.tech/badge/blastpy3)](https://pepy.tech/project/blastpy3)
+[![Anaconda Version](https://anaconda.org/aleg/blastpy3/badges/version.svg)](https://anaconda.org/aleg/blastpy3)
+[![Anaconda Downloads](https://anaconda.org/aleg/blastpy3/badges/downloads.svg)](https://anaconda.org/aleg/blastpy3)
+[![License](https://img.shields.io/badge/Licence-GPLv3-red.svg)](https://github.com/a-slide/blastpy3/blob/master/LICENSE)
+[![Language](https://img.shields.io/badge/Language-Python3.6+-yellow.svg)](https://www.python.org/)
 
-**Simple and lightweight Python 2/3 wrapper module for NCBI BLAST+**
+---
 
-**Creation : 2015/05/18**
+**Lightweight High level Python 3 API for NCBI BLAST+ blastn**
 
-**Last update : 2015/05/22**
+---
+
+## Blastn
+
+This class contain the wrapper for Blastn and require the installation of ncbi Blast+ 2.2.28+.
+
+### Setup Blastn object: Create subject database
+
+Upon instantiation, a database is created from the user-provided subject sequence. Database files are created in a temporary directory.
+The following parameters can be customized at Blastn objects instantiation
+* ref_path: Path to the reference fasta file (not gzipped). Mandatory
+* makeblastdb_exec: Path of the makeblastdb executable. Default = "makeblastdb"
+* makeblastdb_opt: makeblastdb command line options as a string. Default = ""
+
+To ensure a proper database files deletion at the end of the execution it is possible to call the object using the `with` statement.
+Alternatively you can call the `rm_db` method at the end of the Blastn usage.
+
+**Code**
+```
+with Blastn(ref_path="./subject.fa") as blastn:
+    print (blastn)
+```
+**Output**
+```
+CREATE DATABASE: makeblastdb  -dbtype nucl -input_type fasta -in subject.fa -out temp_dir
+
+MAKEBLASTDB CLASS	Parameters list
+	db_dir	/tmp/tmplbkdwzm2
+	db_path	/tmp/tmplbkdwzm2/Yeast
+	makeblastdb_exec	makeblastdb
+	makeblastdb_opt
+	ref_path	./data/Yeast.fa
+	verbose	False
+
+Cleaning up blast DB files for "subject"
+```
+
+### Calling Blastn object: Perform Blastn and return a list of hits
+
+The "align" method of a Blastn object can then be called with a query fasta file (*query_path*) or directly with a sequence string (*query_seq*)..
+The following parameters can be customized at Blastn objects calling:
+
+* query_path: Path to a fasta file containing the query sequences (not gzipped). Mandatory
+* query_seq: sequence string
+* blast_exec: Path of the blast executable. By Default blastn will be used. Default = "blastn"
+* blastn_opt: Blastn command line options as a string. Default = ""
+* task: Type of blast to be performed ('blastn' 'blastn-short' 'dc-megablast' 'megablast' 'rmblastn'). Default = "dc-megablast"
+* evalue: E Value cuttoff to retain alignments. Default = 1
+* best_query_hit: find and return only the best hit per query. Default = False
+
+A list containing 1 BlastHit object for each query hit found in the subject will be returned, except if not hit were found in which situation 'None' will be returned.
+If the best_query_hit flag was set to True, Only the best hit per query sequence from the query file will be returned.
+
+**Code**
+```
+with Blastn(ref_path="./subject.fa") as blastn:
+    hit_list = blastn(query_path="./query.fa")
+    for hit in hit_list:
+        print (hit)
+```
+**Output**
+```
+CREATE DATABASE: makeblastdb  -dbtype nucl -input_type fasta -in ./subject.fa -out /tmp/tmp1ZBlfT/subject
+
+MAKE BLAST: blastn  -num_threads 4 -task dc-megablast -evalue 1 -outfmt "6 std qseq" -dust no -query ./query.fa -db /tmp/tmp1ZBlfT/subject
+
+	2 hits found
+HIT 0	Query	query1:0-48(+)
+	Subject	subject:19-67(+)
+	Lenght : 48	Identity : 100.0%	Evalue : 2e-23	Bit score : 87.8
+	Aligned query seq : GCATGCTCGATCAGTAGCTCTCAGTACGCATACGCTAGCATCACGACT
+
+HIT 1	Query	query2:0-48(+)
+	Subject	subject:89-137(+)
+	Lenght : 48	Identity : 100.0%	Evalue : 2e-23	Bit score : 87.8
+	Aligned query seq : CGCATCGACTCGATCTGATCAGCTCACAGTCAGCATCAGCTACGATCA
+
+Cleaning up blast DB files for "subject"
+```
 
 ## BlastHit
 
@@ -48,88 +131,6 @@ h.get_report(full = True)
 ```
 OrderedDict([('Query', 'query:0-10(+)'), ('Subject', 'subject:0-10(+)'), ('Identity', 100.0), ('Evalue', 0.0), ('Bit Score', 0.0), ('Hit length', 10), ('Number of gap', 0), ('Number of mismatch', 0)])
 ```
-## Blastn
-
-This class contain the wrapper for Blastn and require the installation of ncbi Blast+ 2.2.28+.
-
-### Setup Blastn object: Create subject database
-
-Upon instantiation, a database is created from the user-provided subject sequence. Database files are created in a temporary directory.
-The following parameters can be customized at Blastn objects instantiation
-* ref_path: Path to the reference fasta file (not gzipped). Mandatory
-* makeblastdb_exec: Path of the makeblastdb executable. Default = "makeblastdb"
-* makeblastdb_opt: makeblastdb command line options as a string. Default = ""
-* dbtype: Molecule type of target db ('nucl', 'prot'). Default = "nucl"
-* input_type: type of the data specified in input_file ('asn1_bin', 'asn1_txt', 'blastdb', 'fasta'). Default = "fasta"
-
-To ensure a proper database files deletion at the end of the execution it is possible to call the object using the `with` statement.
-Alternatively you can call the `rm_db` method at the end of the Blastn usage.
-
-**Code**
-```
-with Blastn(ref_path="./subject.fa") as blastn:
-    print (blastn)
-```
-**Output**
-```
-CREATE DATABASE: makeblastdb  -dbtype nucl -input_type fasta -in subject.fa -out /tmp/tmpihszgZ/subject
-
-MAKEBLASTDB CLASS	Parameters list
-	db_basename	subject
-	db_dir	/tmp/tmpihszgZ
-	db_path	/tmp/tmpihszgZ/subject
-	dbtype	nucl
-	input_type	fasta
-	makeblastdb_exec	makeblastdb
-	makeblastdb_opt	
-	ref_path	subject.fa
-
-Cleaning up blast DB files for "subject"
-```
-
-### Calling Blastn object: Perform Blastn and return a list of hits
-
-The Blastn object can then be directly called, as many time as desired, with query fasta files, that can contain several sequences.
-The method will automatically call blastn in a multiprocessing fashion, using as many threads as possible.
-The following parameters can be customized at Blastn objects calling:
-
-* query_path: Path to a fasta file containing the query sequences (not gzipped). Mandatory
-* blast_exec: Path of the blast executable. By Default blastn will be used. Default = "blastn"
-* blastn_opt: Blastn command line options as a string. Default = ""
-* task: Type of blast to be performed ('blastn' 'blastn-short' 'dc-megablast' 'megablast' 'rmblastn'). Default = "dc-megablast"
-* evalue: E Value cuttoff to retain alignments. Default = 1
-* best_query_hit: find and return only the best hit per query. Default = False
-
-A list containing 1 BlastHit object for each query hit found in the subject will be returned, except if not hit were found in which situation 'None' will be returned. 
-If the best_query_hit flag was set to True, Only the best hit per query sequence from the query file will be returned.
-
-**Code**
-```
-with Blastn(ref_path="./subject.fa") as blastn:
-    hit_list = blastn(query_path="./query.fa")
-    for hit in hit_list:
-        print (hit)
-```
-**Output**
-```
-CREATE DATABASE: makeblastdb  -dbtype nucl -input_type fasta -in ./subject.fa -out /tmp/tmp1ZBlfT/subject
-
-MAKE BLAST: blastn  -num_threads 4 -task dc-megablast -evalue 1 -outfmt "6 std qseq" -dust no -query ./query.fa -db /tmp/tmp1ZBlfT/subject
-
-	2 hits found
-HIT 0	Query	query1:0-48(+)
-	Subject	subject:19-67(+)
-	Lenght : 48	Identity : 100.0%	Evalue : 2e-23	Bit score : 87.8
-	Aligned query seq : GCATGCTCGATCAGTAGCTCTCAGTACGCATACGCTAGCATCACGACT
-
-HIT 1	Query	query2:0-48(+)
-	Subject	subject:89-137(+)
-	Lenght : 48	Identity : 100.0%	Evalue : 2e-23	Bit score : 87.8
-	Aligned query seq : CGCATCGACTCGATCTGATCAGCTCACAGTCAGCATCAGCTACGATCA
-
-Cleaning up blast DB files for "subject"
-```
-
 
 ## Testing pyBlast module
 
@@ -142,8 +143,8 @@ Example of output if successful. Please note than some tests might fail due to t
 ```
 ========================================== test session starts ===========================================
 platform linux2 -- Python 2.7.5 -- py-1.4.27 -- pytest-2.7.0 -- /usr/bin/python
-rootdir: /home/adrien/Programming/Python/pyBlast, inifile: 
-collected 21 items 
+rootdir: /home/adrien/Programming/Python/pyBlast, inifile:
+collected 21 items
 
 test_pyBlast.py::test_BlastHit[4.16866907958-57-98-69-88-12-100-43-1.40452897105-47.3666242716] PASSED
 test_pyBlast.py::test_BlastHit[-1-7-10-20-73-54-25-45-98.7921480151-45.2397166228] xfail

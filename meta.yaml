@@ -1,0 +1,35 @@
+{% set version = "0.3.0" %}
+{% set name = "blastpy3" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  path: dist/{{ name }}-{{ version }}.tar.gz
+
+build:
+  number: 0
+  script: "pip install {{ name }}-{{ version }}.tar.gz --no-deps --ignore-installed -vv "
+  noarch: "python"
+
+requirements:
+  build:
+    - python>=3.6
+    - pip>=19.2.1
+    - ripgrep>=11.0.1
+  run:
+    - pyfaidx>=0.5.8
+    - blast>=2.9.0
+
+test:
+  imports:
+    - blastpy3.BlastHit
+    - blastpy3.Blastn
+
+about:
+  home: "https://github.com/a-slide/blastpy3"
+  license: "GNU General Public v3 (GPLv3)"
+  license_file: LICENSE
+  license_family: GPL
+  summary: "Lightweight High level Python 3 API for NCBI BLAST"
